@@ -7,11 +7,13 @@ using UnityEngine;
 /// Важно: работает ТОЛЬКО с ортографической камерой Main Camera в [ 0, 0, 0 ]
 /// </summary>
 
-public class BoundsChek : MonoBehaviour
+public class BoundsCheck : MonoBehaviour
 {
     [Header("Set in Inspector")]
     public float radius = 1f;
+    public bool keepOnScreen = true;
     [Header("Ser Dynamically")]
+    public bool isOnScreen = true;
     public float camWidth;
     public float camHeight;
 
@@ -24,11 +26,33 @@ public class BoundsChek : MonoBehaviour
     void LateUpdate()
     {
         Vector3 pos = transform.position;
-        if(pos.x > camWidth-radius) pos.x = camWidth-radius;
-        if(pos.x< -camWidth+radius) pos.x = -camWidth+radius;
-        if(pos.y> camHeight -radius) pos.y = camHeight-radius;
-        if (pos.y< -camHeight+radius) pos.y = -camHeight+radius;
-        transform.position = pos;
+        isOnScreen = true;
+        if (pos.x > camWidth - radius)
+        {
+            pos.x = camWidth - radius;
+            isOnScreen = false;
+        }
+        if (pos.x < -camWidth + radius)
+        {
+            pos.x = -camWidth + radius;
+            isOnScreen = false;
+        }
+        if (pos.y > camHeight - radius)
+        {
+            pos.y = camHeight - radius;
+            isOnScreen = false;
+        }
+        if (pos.y < -camHeight + radius)
+        {
+            pos.y = -camHeight + radius;
+            isOnScreen = false;
+        }
+        if (!isOnScreen && keepOnScreen) 
+        {
+            transform.position = pos;
+            isOnScreen = true;
+        }
+        
     }
 
     void OnDrawGizmos()
