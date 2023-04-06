@@ -36,6 +36,16 @@ public class Main : MonoBehaviour
         go.transform.position = pos;
         Invoke("SpawnEnemy", 1f / enemySpawnPerSecond);
     }
+
+    public void DelayedRestart(float delay)
+    {
+        Invoke("Restart", delay);
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene("_Scene_0");
+    }
     // Start is called before the first frame update
     void Start()
     {
