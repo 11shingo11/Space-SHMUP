@@ -13,6 +13,8 @@ public class Hero : MonoBehaviour
     [Header("Set Dynamically")]
     public float shieldLevel = 1;
 
+    private GameObject lastTriggerGo = null;
+
     void Awake()
     {
         if (S == null)
@@ -37,6 +39,27 @@ public class Hero : MonoBehaviour
         transform.position = pos;
 
         transform.rotation = Quaternion.Euler(yAxis * pitchMult, xAxis * rollMult, 0);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        Transform rootT = other.gameObject.transform.root;
+        GameObject go = rootT.gameObject;
+
+        if (go == lastTriggerGo)
+        {
+            return;    
+        }
+        lastTriggerGo = go;
+        if (go.tag == "Enemy")
+        {
+            shieldLevel--;
+            Destroy(go);
+        }
+        else
+        {
+            print("Triggered by non-Enemy: " + go.name);
+        }
     }
 
 

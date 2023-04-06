@@ -5,7 +5,7 @@ using UnityEngine;
 public class Shield : MonoBehaviour
 {
     [Header("Set in Inspector")]
-    public float rotationsPerSecond = 1.0f;
+    public float rotationsPerSecond = 0.1f;
 
     [Header("Set Dynamically")]
     public int levelShown = 0;
