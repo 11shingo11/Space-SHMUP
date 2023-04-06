@@ -21,7 +21,7 @@ public class BoundsChek : MonoBehaviour
         camWidth = camHeight * Camera.main.aspect;
     }
 
-    void LastUpdate()
+    void LateUpdate()
     {
         Vector3 pos = transform.position;
         if(pos.x > camWidth-radius) pos.x = camWidth-radius;
@@ -34,8 +34,8 @@ public class BoundsChek : MonoBehaviour
     void OnDrawGizmos()
     {
         if (!Application.isPlaying) return;
-        Vector3 BoundSize = new Vector3(camWidth*2, camHeight*2, 0.1f);
-        OnDrawGizmos().DrawWireCube(Vector3.zero, boundSize);
+        Vector3 boundSize = new Vector3(camWidth*2, camHeight*2, 0.1f);
+        Gizmos.DrawWireCube(Vector3.zero, boundSize);
     }
     // Start is called before the first frame update
     void Start()
