@@ -6,17 +6,45 @@ using UnityEngine.SceneManagement;
 public class Main : MonoBehaviour
 {
     static public Main S;
+    public WeaponDefinition[] weaponDefinitions;
+    public GameObject prefabPowerUp;
+    public WeaponType[] powerUpFrequency = new WeaponType[]
+    {
+        WeaponType.blaster,
+        WeaponType.blaster,
+        WeaponType.spread,
+        WeaponType.shield
+    };
+    private BoundsCheck bndCheck;
+    static Dictionary<WeaponType, WeaponDefinition> WEAP_DICT;
     [Header("Set in Inspector")]
     public GameObject[] prefabEnemies;
     public float enemySpawnPerSecond = 0.5f;
     public float enemyDefaultPadding = 1.5f;
-    private BoundsCheck bndCheck;
+
+    public void ShipDestroyed(Enemy e)
+    {
+        if (Random.value <= e.powerUpDropChance)
+        {
+            int ndx = Random.Range(0, powerUpFrequency.Length);
+            WeaponType puType = powerUpFrequency[ndx];
+            GameObject go = Instantiate(prefabPowerUp) as GameObject;
+            PowerUp pu = go.GetComponent<PowerUp>();
+            pu.SetType(puType);
+            pu.transform.position = e.transform.position;
+        }
+    }
 
     void Awake()
     {
         S = this;
         bndCheck = GetComponent<BoundsCheck>();
         Invoke("SpawnEnemy", 1f / enemySpawnPerSecond);
+        WEAP_DICT = new Dictionary<WeaponType, WeaponDefinition>();
+        foreach (WeaponDefinition def in weaponDefinitions)
+        {
+            WEAP_DICT[def.type] = def;
+        }
     }
 
     public void SpawnEnemy()
@@ -46,15 +74,13 @@ public class Main : MonoBehaviour
     {
         SceneManager.LoadScene("_Scene_0");
     }
-    // Start is called before the first frame update
-    void Start()
+    
+    static public WeaponDefinition GetWeaponDefinition(WeaponType wt)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (WEAP_DICT.ContainsKey(wt))
+        {
+            return (WEAP_DICT[wt]);
+        }
+        return (new WeaponDefinition());
     }
 }
